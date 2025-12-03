@@ -1,26 +1,29 @@
 // Plugins necesarios para el proyecto
 plugins {
     id 'java' // Plugin para compilar y empaquetar código Java
-    id 'org.springframework.boot' version '3.4.2' // Plugin de Spring Boot para facilitar la construcción de aplicaciones Spring Boot
-    id 'io.spring.dependency-management' version '1.1.7' // Plugin para gestionar dependencias de manera eficiente en proyectos Spring
+    id 'org.springframework.boot' version '3.4.2' // Plugin de Spring Boot
+    id 'io.spring.dependency-management' version '1.1.7' // Gestión de dependencias
+
+    // ⭐ SonarQube
+    id "org.sonarqube" version "7.1.0.6387"
 }
 
 // Configuración del grupo y la versión del proyecto
-group = 'com.musicfly' // Define el grupo del proyecto (generalmente el nombre de dominio en formato invertido)
-version = '0.0.1-SNAPSHOT' // Define la versión del proyecto (en este caso, una versión de desarrollo)
+group = 'com.musicfly'
+version = '0.0.1-SNAPSHOT'
 
 // Configuración de la versión de Java
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17) // Establece la versión de Java a usar (Java 17)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
 // Repositorios donde buscar las dependencias
 repositories {
-    mavenCentral() // Repositorio de Maven Central donde se buscarán las dependencias
-    maven { url "https://repo.spring.io/milestone" } // Versiones milestone de Spring Cloud
-    maven { url "https://repo.spring.io/snapshot" }  // Versiones snapshot si es necesario
+    mavenCentral()
+    maven { url "https://repo.spring.io/milestone" }
+    maven { url "https://repo.spring.io/snapshot" }
 }
 
 test {
@@ -29,93 +32,68 @@ test {
 
 // Dependencias necesarias para el proyecto
 dependencies {
-    // Dependencias de Spring Boot
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // Starter para acceso a bases de datos con JPA (Java Persistence API)
-    implementation 'org.springframework.boot:spring-boot-starter-web'  // Starter para crear servicios web REST usando Spring MVC
-    implementation 'org.springframework.boot:spring-boot-starter-validation' // Starter para la validación de datos en Spring
-    implementation 'org.springframework.boot:spring-boot-starter-security' // Starter para añadir seguridad a la aplicación Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-data-ldap'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.security:spring-security-test'
 
-    // Driver de MySQL
-    runtimeOnly 'com.mysql:mysql-connector-j' // Driver de MySQL para la conexión con bases de datos MySQL
+    runtimeOnly 'com.mysql:mysql-connector-j'
 
-    // Dependencias para la generación de PDFs usando iText
     implementation 'com.itextpdf:itext7-core:7.2.2'
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
 
-    // Para trabajar con la API de Servlets (necesario para manejar HttpServletResponse)
-    implementation 'javax.servlet:javax.servlet-api:4.0.1' // API de Servlet para manejo de respuestas HTTP
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    // Dependencias para pruebas
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'  // Starter para realizar pruebas unitarias y de integración en Spring Boot
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'  // Para soporte de pruebas usando JUnit
-
-    // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
 
-    // Dependencias para gestión de audio
     implementation 'org.apache.tika:tika-core:2.9.3'
     implementation 'org.apache.tika:tika-parsers:2.9.3'
     implementation 'org.bytedeco:javacv-platform:1.5.11'
 
-    // Openapi
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6'
 
-    //OAuth2
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 
-    //JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5' // usa Jackson para serializar/deserializar
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-    // Spring Security OAuth2 JOSE (para trabajar con JWT)
-    implementation 'org.springframework.security:spring-security-oauth2-jose'  // Verifica la última versión disponible
+    implementation 'org.springframework.security:spring-security-oauth2-jose'
+    implementation 'com.nimbusds:nimbus-jose-jwt'
 
-    // Nimbus JOSE JWT (para manejar JWK y JWT)
-    implementation 'com.nimbusds:nimbus-jose-jwt'  // Verifica la última versión disponible
-
-    // Generar / Consumir claves RSA
     implementation 'org.bouncycastle:bcpkix-jdk18on:1.79'
 
-    // Vinculacion con el application.properties
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
-    // Dependencia de Redis para Spring Boot para almacenar los JWT
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
-    // Dependencia de Lettuce (cliente de Redis para Spring Boot)
     implementation 'io.lettuce:lettuce-core:6.3.2.RELEASE'
 
-    // Mail
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'com.google.auth:google-auth-library-oauth2-http:1.15.0'
 
-    // FreeMarker
     implementation 'org.springframework.boot:spring-boot-starter-freemarker'
 
-    // Utils
     implementation platform("com.fasterxml.jackson:jackson-bom:2.17.2")
 
     implementation "com.fasterxml.jackson.core:jackson-databind"
     implementation "com.fasterxml.jackson.core:jackson-core"
     implementation "com.fasterxml.jackson.core:jackson-annotations"
 
-    // Logs
     implementation 'ch.qos.logback:logback-classic'
 
-    // Optional: Actuator para monitoreo
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
 
-    // Eureka Client (para registrar en un Eureka externo)
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 }
 
@@ -125,7 +103,15 @@ dependencyManagement {
     }
 }
 
-// Configuración para usar JUnit Platform en las pruebas
+// Configuración para usar JUnit Platform
 tasks.named('test') {
-    useJUnitPlatform() // Configura el uso de la plataforma JUnit para ejecutar las pruebas
+    useJUnitPlatform()
+}
+
+// ⭐ Configuración de SonarQube
+sonar {
+    properties {
+        property "sonar.projectKey", "samuelstx_proyecto-gps-25-26-gc03-microservice-users"
+        property "sonar.organization", "samuelstx"
+    }
 }
