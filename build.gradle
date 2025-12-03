@@ -105,13 +105,13 @@ dependencyManagement {
 
 // Configuración para usar JUnit Platform
 tasks.named('test') {
-    useJUnitPlatform()
+    //useJUnitPlatform()
 }
 
 // ⭐ Configuración de SonarQube
-sonar {
-    properties {
-        property "sonar.projectKey", "samuelstx_proyecto-gps-25-26-gc03-microservice-users"
-        property "sonar.organization", "samuelstx"
-    }
+sonarqube {
+  properties {
+    property "sonar.projectKey", "samuelstx_proyecto-gps-25-26-gc03-microservice-users"
+    property "sonar.organization", "samuelstx"
+  }
 }
