@@ -6,7 +6,6 @@ import com.musicfly.backend.repositories.UserRepository;
 import com.musicfly.backend.services.RedisTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,6 +30,8 @@ public class CoreViewsController {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncorer;
+
+    private final static String ERROR_MSG = "error";
 
     @GetMapping("core/views/register/success")
     public ModelAndView showSuccessView() {
@@ -64,7 +65,7 @@ public class CoreViewsController {
             }
         }
         
-        model.addAttribute("error", "El código ingresado no es válido.");
+        model.addAttribute(ERROR_MSG, "El código ingresado no es válido.");
         return "email/code-verified";
 
     }
@@ -95,7 +96,7 @@ public class CoreViewsController {
                 Optional<User> user = userRepository.findByUsername(username);
 
                 if (!nueva.equals(confirmar)) {
-                    model.addAttribute("error", "Las contraseñas no coinciden.");
+                    model.addAttribute(ERROR_MSG, "Las contraseñas no coinciden.");
                     return "email/password-reset-form";
                 }
 
@@ -106,14 +107,10 @@ public class CoreViewsController {
                             userRepository.save(user.get());
                             model.addAttribute("success", "Contraseña actualizada correctamente.");
                             return "email/password-reset-form";
-                    }else{
-                        System.err.println("Usuario no encontrado");
                     }
-                }else{
-                    System.err.println("Error al encontrar el token");
                 }
 
-            model.addAttribute("error", "Solicitud inválida o expirada.");
+            model.addAttribute(ERROR_MSG, "Solicitud inválida o expirada.");
             return "email/password-reset-form";
     }
 

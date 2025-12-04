@@ -46,6 +46,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserRepository userRepository;
     private final ApplicationProperties applicationProperties;
 
+    private final static String APPLICATION_TYPE = "application/json";
+
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -79,7 +81,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             e.printStackTrace();
             logger.warn("Invalid JWT token provided - IP: {} - URI: {} - Error: {}", ip, request.getRequestURI(), e.getMessage());
-            response.setContentType("application/json");
+            response.setContentType(APPLICATION_TYPE);
             response.setCharacterEncoding("UTF-8");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write(MAPPER.writeValueAsString(ErrorResponseDTO.builder()
@@ -96,7 +98,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // Comprueba si el token está en la blacklist
         if (redisTokenService.hasTokenType(UserOptionsUUID.BLACK_LIST, token)) {
             logger.warn("CONTROLLER REQUEST WITH BLACKLISTED TOKEN - IP: {} - URI: {} - TOKEN: {}", ip, request.getRequestURI(), token);
-            response.setContentType("application/json");
+            response.setContentType(APPLICATION_TYPE);
             response.setCharacterEncoding("UTF-8");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write(MAPPER.writeValueAsString(ErrorResponseDTO.builder()
@@ -125,7 +127,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
             } else {
                 logger.warn("CONTROLLER REQUEST WITH TOKEN FAILED - IP: {} - URI: {} - TOKEN: {}", ip, request.getRequestURI(), token);
-                response.setContentType("application/json");
+                response.setContentType(APPLICATION_TYPE);
                 response.setCharacterEncoding("UTF-8");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write(MAPPER.writeValueAsString(ErrorResponseDTO.builder()

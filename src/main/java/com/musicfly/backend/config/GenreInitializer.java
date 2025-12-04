@@ -33,7 +33,10 @@ public class GenreInitializer {
     public void initGenres() {
         for (GenreType genreType : GenreType.values()) {
             genreRepository.findByType(genreType)
-                    .orElseGet(() -> genreRepository.save(new Genre(genreType)));
+                    .ifPresentOrElse(
+                            g -> {}, // si existe, no hacer nada
+                            () -> genreRepository.save(new Genre(genreType))
+                    );
         }
     }
 }
